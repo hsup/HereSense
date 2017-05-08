@@ -1,0 +1,135 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.motussoft.heresense" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+
+    <!-- BEGIN Google Drive Upload POI Logs Required Permissions BEGIN -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- END Google Drive Upload POI Logs Required Permissions END -->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- Added for Motussoft HereSense -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/heresense_google_api_key" />
+
+        <!-- ******** HereSense Activity BEGIN ******** -->
+        <activity
+            android:name=".HereSenseActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden|uiMode|screenSize"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".HereSenseActivity$BootCompletedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <!-- ******** HereSense Activity BEGIN ******** -->
+
+        <!-- ******** HereSense Service BEGIN ******** -->
+        <service
+            android:name=".HereSenseService"
+            android:exported="false" >
+        </service>
+
+        <!-- All broadcast intents received here are wrapped to PoiService for handling -->
+        <receiver
+            android:name=".HereSenseService$ServiceReceiver" >
+            <intent-filter>
+                <!-- Poi aging notification broadcast -->
+                <action android:name="ACTION_POI_AGING" />
+
+                <!-- Auto upload POI logs broadcast -->
+                <action android:name="ACTION_UPLOAD_POI_LOGS" />
+
+                <!-- Auto dump states to logs broadcast -->
+                <action android:name="ACTION_DUMP_STATES" />
+
+                <!-- DetectMotionService notification broadcasts  -->
+                <action android:name="ACTION_ON_COARSE_DWELL_DETECTED" />
+                <action android:name="ACTION_ON_DWELL_DETECTED" />
+                <action android:name="ACTION_IN_TRANSIT_DETECTED" />
+            </intent-filter>
+        </receiver>
+        <!-- ******** HereSense Service END ******** -->
+
+        <!-- ******** Detect Motion Service BEGIN ******** -->
+        <service
+            android:name=".dwelldetection.DetectDwellService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".dwelldetection.DetectDwellService$DwellGpsUpdate" >
+            <intent-filter>
+                <action android:name="ACTION_COARSE_DWELL_GPS_UPDATE" />
+                <action android:name="ACTION_COARSE_DWELL_GPS_TIMEOUT" />
+                <action android:name="ACTION_DWELL_GPS_UPDATE" />
+                <action android:name="ACTION_DWELL_GPS_TIMEOUT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".dwelldetection.DetectDwellService$ActivityRecognitionReceiver" >
+            <intent-filter>
+                <action android:name="ACTION_DWELL_ACTIVITY_RECOGNITION" />
+                <action android:name="ACTION_TRANSIT_ACTIVITY_RECOGNITION" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".dwelldetection.DetectDwellService$LocationUpdateReceiver" >
+            <intent-filter>
+                <action android:name="ACTION_DETECT_DWELL_LOCATION_UPDATE" />
+                <action android:name="ACTION_DETECT_TRANSIT_LOCATION_UPDATE" />
+            </intent-filter>
+        </receiver>
+        <!-- ******** Detect Motion Service END ******** -->
+
+        <!-- ******** HereSenseProvider BEGIN ******** -->
+        <provider
+            android:name=".provider.HereSenseProvider"
+            android:authorities="com.motussoft.heresense"
+            android:exported="false"
+            />
+        <!-- ******** HereSenseProvider END ******** -->
+
+        <!-- ******** Logging Service BEGIN ******** -->
+        <service
+            android:name=".logging.LoggingService"
+            android:exported="false" >
+        </service>
+
+        <activity
+            android:name=".logging.LogsUploadActivity" >
+        </activity>
+        <!-- ******** Logging Service END ******** -->
+
+    </application>
+
+</manifest>

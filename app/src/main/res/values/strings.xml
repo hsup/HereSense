@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">HereSense</string>
+
+    <string name="vibrate_label">Vibrate</string>
+    <string name="vibrate_msg">Vibrate when entering and exiting PoI locations.</string>
+
+    <string name="poi_debug_menu_title">PoI Logs</string>
+    <string name="email_poi_logs">Email Logs</string>
+    <string name="delete_poi_logs">Delete Logs</string>
+</resources>

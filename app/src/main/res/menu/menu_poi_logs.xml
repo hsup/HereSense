@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item android:id="@+id/email_poi_logs"
+          android:title="@string/email_poi_logs"
+          android:icon="@drawable/ic_email_white_48dp"
+          android:showAsAction="always" />
+
+    <item android:id="@+id/delete_poi_logs"
+          android:title="@string/delete_poi_logs"
+          android:icon="@drawable/ic_delete_white_48dp"
+          android:showAsAction="never" />
+
+</menu>
